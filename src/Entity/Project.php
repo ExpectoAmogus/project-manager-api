@@ -26,6 +26,10 @@ class Project
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $status = ProjectStatus::TODO;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "projects")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $creator = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,6 +83,18 @@ class Project
 //        }
 
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

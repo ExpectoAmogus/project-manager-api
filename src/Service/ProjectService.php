@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Project;
 use App\Exception\EntityAlreadyExistsException;
 use App\Exception\EntityNotFoundException;
 use App\Mapper\ProjectMapper;

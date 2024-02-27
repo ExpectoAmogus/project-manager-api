@@ -34,7 +34,7 @@ class ProjectController extends AbstractController
     public function createProject(#[RequestBody] ProjectCreateRequest $projectRequest): Response
     {
         $this->projectService->createProject($projectRequest);
-        return $this->json(null);
+        return $this->json(null, 201);
     }
 
     #[Route("/api/v1/project/update/{id}", name: "project_update", methods: "PATCH")]
@@ -45,7 +45,7 @@ class ProjectController extends AbstractController
     }
 
     #[Route("/api/v1/project/delete/{id}", name: "project_delete", methods: "DELETE")]
-    public function deleteProject($id)
+    public function deleteProject($id): Response
     {
         $this->projectService->deleteProject($id);
         return $this->json(null);
