@@ -23,6 +23,13 @@ class TaskController extends AbstractController
         return $this->json($tasks, 200, [], ['groups' => 'task']);
     }
 
+    #[Route("/api/v1/task/{projectId}/all", name: "task_list_by_project", methods: "GET")]
+    public function listTasksByProject($projectId): Response
+    {
+        $tasks = $this->taskService->getAllTasksByProjectId($projectId);
+        return $this->json($tasks, 200, [], ['groups' => 'task']);
+    }
+
     #[Route("/api/v1/task/{id}", name: "task_show", methods: "GET")]
     public function showTask($id): Response
     {
@@ -35,7 +42,7 @@ class TaskController extends AbstractController
     public function createTask(#[RequestBody] TaskCreateRequest $taskCreateRequest): Response
     {
         $this->taskService->createTask($taskCreateRequest);
-        return $this->json(null);
+        return $this->json(null, 201);
     }
 
     #[Route("/api/v1/task/update/{id}", name: "task_update", methods: "PATCH")]
@@ -46,7 +53,7 @@ class TaskController extends AbstractController
     }
 
     #[Route("/api/v1/task/delete/{id}", name: "task_delete", methods: "DELETE")]
-    public function deleteTask($id)
+    public function deleteTask($id): Response
     {
         $this->taskService->deleteTask($id);
         return $this->json(null);

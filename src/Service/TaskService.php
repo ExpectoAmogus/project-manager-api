@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Project;
-use App\Entity\Task;
 use App\Exception\EntityAlreadyExistsException;
 use App\Exception\EntityNotFoundException;
 use App\Mapper\TaskMapper;
@@ -25,6 +24,19 @@ class TaskService
     public function getAllTasks(): TaskListResponse
     {
         $tasks = $this->taskRepository->findAllSortedByDeadline();
+        $taskDTOs = array_map([$this->taskMapper, 'mapToDTO'], $tasks);
+
+        return new TaskListResponse($taskDTOs);
+    }
+
+    public function getAllTasksByProjectId(int $projectId): TaskListResponse
+    {
+        if (!$this->manager->getRepository(Project::class)->existsById($projectId)) {
+            throw new EntityNotFoundException();
+        }
+
+        $project = $this->manager->getRepository(Project::class)->find($projectId);
+        $tasks = $this->taskRepository->findAllByProjectSortedByDeadline($project);
         $taskDTOs = array_map([$this->taskMapper, 'mapToDTO'], $tasks);
 
         return new TaskListResponse($taskDTOs);

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Project;
 use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -33,6 +34,11 @@ class TaskRepository extends ServiceEntityRepository
     public function findAllSortedByDeadline(): array
     {
         return $this->findBy([], ['deadline' => Criteria::ASC]);
+    }
+
+    public function findAllByProjectSortedByDeadline(Project $project): array
+    {
+        return $this->findBy(['project' => $project], ['deadline' => Criteria::ASC]);
     }
 
     public function existsById(int $id): bool
