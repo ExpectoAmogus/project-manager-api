@@ -21,6 +21,7 @@
         "symfony/mailer": "7.0.*",
         "symfony/property-access": "7.0.*",
         "symfony/property-info": "7.0.*",
+        "symfony/rate-limiter": "7.0.*",
         "symfony/runtime": "7.0.*",
         "symfony/security-bundle": "7.0.*",
         "symfony/serializer": "7.0.*",
@@ -81,6 +82,8 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.48",
         "phpunit/phpunit": "^10.5",
-        "symfony/maker-bundle": "^1.52"
+        "symfony/maker-bundle": "^1.52",
+        "symfony/stopwatch": "7.0.*",
+        "symfony/web-profiler-bundle": "7.0.*"
     }
 }
