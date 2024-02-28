@@ -48,6 +48,7 @@ class ProjectService
         }
 
         $project = $this->projectMapper->mapToEntity($projectCreateRequest);
+        //TODO: add slug from title algorithm
 
         $this->manager->persist($project);
         $this->manager->flush();
@@ -61,7 +62,8 @@ class ProjectService
         }
         $project = $this->projectRepository->find($id);
 
-        $this->projectMapper->mapToEntityFromUpdateRequest($updatedProject, $project);
+        $project = $this->projectMapper->mapToEntityFromUpdateRequest($updatedProject, $project);
+        //TODO: add slug from title algorithm
 
         $this->manager->persist($project);
         $this->manager->flush();

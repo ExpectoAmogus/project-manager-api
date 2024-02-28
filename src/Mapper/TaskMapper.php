@@ -40,6 +40,7 @@ class TaskMapper
         return (new TaskListItem())
             ->setId($task->getId())
             ->setTitle($task->getTitle())
+            ->setSlug($task->getSlug())
             ->setDescription($task->getDescription())
             ->setDeadline($task->getDeadline()->getTimestamp())
             ->setStatus($task->getStatus())

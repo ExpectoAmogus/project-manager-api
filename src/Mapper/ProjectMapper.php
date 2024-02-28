@@ -39,6 +39,7 @@ class ProjectMapper
         return (new ProjectListItem())
             ->setId($project->getId())
             ->setTitle($project->getTitle())
+            ->setSlug($project->getSlug())
             ->setDescription($project->getDescription())
             ->setDeadline($project->getDeadline()->getTimestamp())
             ->setStatus($project->getStatus());

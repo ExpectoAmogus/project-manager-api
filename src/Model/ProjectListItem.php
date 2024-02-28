@@ -6,6 +6,7 @@ class ProjectListItem
 {
     private int $id;
     private string $title;
+    private string $slug;
     private string $description;
     private int $deadline;
     private string $status;
@@ -29,6 +30,17 @@ class ProjectListItem
     public function setTitle(string $title): self
     {
         $this->title = $title;
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
         return $this;
     }
 

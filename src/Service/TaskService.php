@@ -65,6 +65,7 @@ class TaskService
         $project = $this->manager->getRepository(Project::class)->find($taskCreateRequest->getProjectId());
 
         $task = $this->taskMapper->mapToEntity($taskCreateRequest, $project);
+        //TODO: add slug from title algorithm
 
         $this->manager->persist($task);
         $this->manager->flush();
@@ -79,7 +80,7 @@ class TaskService
 
         $task = $this->taskRepository->find($id);
 
-        $this->taskMapper->mapToEntityFromUpdateRequest($updatedTask, $task);
+        $task = $this->taskMapper->mapToEntityFromUpdateRequest($updatedTask, $task);
 
         $this->manager->persist($task);
         $this->manager->flush();
