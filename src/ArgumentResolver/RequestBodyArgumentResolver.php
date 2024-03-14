@@ -12,9 +12,9 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class RequestBodyArgumentResolver implements ValueResolverInterface
+readonly class RequestBodyArgumentResolver implements ValueResolverInterface
 {
-    public function __construct(private readonly SerializerInterface $serializer, private readonly ValidatorInterface $validator)
+    public function __construct(private SerializerInterface $serializer, private ValidatorInterface $validator)
     {
     }
 

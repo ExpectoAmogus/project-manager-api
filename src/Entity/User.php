@@ -18,8 +18,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+    #[ORM\Column(length: 180, unique: true, nullable: false)]
+    private string $email;
 
     #[ORM\Column]
     private array $roles = [];
@@ -27,23 +27,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
-    private ?string $password = null;
+    #[ORM\Column(nullable: false)]
+    private string $password;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -72,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): static
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -87,7 +87,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -108,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isVerified;
     }
 
-    public function setIsVerified(bool $isVerified): static
+    public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
 
