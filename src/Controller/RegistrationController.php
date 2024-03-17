@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -18,34 +19,20 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class RegistrationController extends AbstractController
 {
     private EmailVerifier $emailVerifier;
+    private UserRepository $userRepository;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(EmailVerifier  $emailVerifier,
+                                UserRepository $userRepository)
     {
         $this->emailVerifier = $emailVerifier;
+        $this->userRepository = $userRepository;
     }
 
     #[Route('/api/v1/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request): Response
     {
-        $user = new User();
-        $user->setRoles($user->getRoles());
         $jsonData = json_decode($request->getContent());
-//        $form = $this->createForm(RegistrationFormType::class, $user);
-//        $form->handleRequest($request);
-
-//        if ($form->isSubmitted() && $form->isValid()) {
-        // encode the plain password
-        $user->setPassword(
-            $userPasswordHasher->hashPassword(
-                $user,
-//                    $form->get('plainPassword')->getData()
-                $jsonData->get('plainPassword')->getData()
-            )
-        );
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
+        $user = $this->userRepository->create($jsonData);
         // generate a signed url and email it to the user
         $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
             (new TemplatedEmail())
@@ -56,7 +43,7 @@ class RegistrationController extends AbstractController
         );
         // do anything else you need here, like send an email
 
-        return $this->json("User successfully created!", 201);
+        return $this->json(['user' => $user->getUserIdentifier()], 201);
 //    }
     }
 
