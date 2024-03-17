@@ -29,37 +29,35 @@ class RegistrationController extends AbstractController
     {
         $user = new User();
         $user->setRoles($user->getRoles());
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        $jsonData = json_decode($request->getContent());
+//        $form = $this->createForm(RegistrationFormType::class, $user);
+//        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+//        if ($form->isSubmitted() && $form->isValid()) {
+        // encode the plain password
+        $user->setPassword(
+            $userPasswordHasher->hashPassword(
+                $user,
+//                    $form->get('plainPassword')->getData()
+                $jsonData->get('plainPassword')->getData()
+            )
+        );
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('kirakanta24@gmail.com', 'Project Manager Mail Bot'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
+        // generate a signed url and email it to the user
+        $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            (new TemplatedEmail())
+                ->from(new Address('kirakanta24@gmail.com', 'Project Manager Mail Bot'))
+                ->to($user->getEmail())
+                ->subject('Please Confirm your Email')
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+        );
+        // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('project_list');
-        }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        return $this->json("User successfully created!", 201);
+//    }
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
