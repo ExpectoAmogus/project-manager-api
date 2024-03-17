@@ -31,7 +31,7 @@ class Task
 
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: "tasks")]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project;
+    private Project $project;
 
     public function getId(): ?int
     {
@@ -91,9 +91,9 @@ class Task
 
     public function setStatus(string $status): self
     {
-//        if (!TaskStatus::isValid($status)) {
-//            throw new \InvalidArgumentException("Invalid task status.");
-//        }
+        if (!TaskStatus::isValid($status)) {
+            throw new \InvalidArgumentException("Invalid task status.");
+        }
 
         $this->status = $status;
 
@@ -103,15 +103,16 @@ class Task
     /**
      * @return Project
      */
-    public function getProject()
+    public function getProject(): Project
     {
         return $this->project;
     }
 
     /**
      * @param Project $project
+     * @return Task
      */
-    public function setProject($project): self
+    public function setProject(Project $project): self
     {
         $this->project = $project;
 

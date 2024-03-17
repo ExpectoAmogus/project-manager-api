@@ -16,7 +16,7 @@ class ProjectMapper
         $project
             ->setTitle($projectRequest->getTitle())
             ->setDescription($projectRequest->getDescription())
-            ->setDeadline(new \DateTimeImmutable('@' . $projectRequest->getDeadline()))
+            ->setDeadline(new \DateTimeImmutable())
             ->setStatus(ProjectStatus::TODO);
 
 

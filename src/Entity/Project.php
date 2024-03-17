@@ -14,31 +14,31 @@ class Project
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[ORM\Column(length: 255, nullable: false)]
+    private string $title;
 
-    #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    #[ORM\Column(length: 255, nullable: false)]
+    private string $slug;
 
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $deadline = null;
+    private \DateTimeImmutable $deadline;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private ?string $status = ProjectStatus::TODO;
+    private string $status = ProjectStatus::TODO;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "projects")]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $creator = null;
+    private User $creator;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -50,12 +50,12 @@ class Project
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
-    public function setSlug(?string $slug): self
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
         return $this;
@@ -73,7 +73,7 @@ class Project
         return $this;
     }
 
-    public function getDeadline(): ?\DateTimeImmutable
+    public function getDeadline(): \DateTimeImmutable
     {
         return $this->deadline;
     }
@@ -85,28 +85,28 @@ class Project
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): string
     {
         return $this->status;
     }
 
     public function setStatus(string $status): self
     {
-//        if (!ProjectStatus::isValid($status)) {
-//            throw new \InvalidArgumentException("Invalid project status.");
-//        }
+        if (!ProjectStatus::isValid($status)) {
+            throw new \InvalidArgumentException("Invalid project status.");
+        }
 
         $this->status = $status;
 
         return $this;
     }
 
-    public function getCreator(): ?User
+    public function getCreator(): User
     {
         return $this->creator;
     }
 
-    public function setCreator(?User $creator): self
+    public function setCreator(User $creator): self
     {
         $this->creator = $creator;
 

@@ -10,5 +10,9 @@ class ProjectStatus
 
     public static function isValid(string $status)
     {
+        if ($status == 'todo' || $status == 'in_progress' || $status == 'completed'){
+            return true;
+        }
+        return false;
     }
 }
