@@ -43,11 +43,11 @@ class RegistrationController extends AbstractController
         );
         // do anything else you need here, like send an email
 
-        return $this->json(['user' => $user->getUserIdentifier()], 201);
+        return $this->json(['message' => 'Email verification sent'], Response::HTTP_CREATED);
 //    }
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
+    #[Route('/api/v1/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -56,14 +56,10 @@ class RegistrationController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $exception->getReason());
 
-            return $this->redirectToRoute('app_register');
+            return $this->json(['message' => 'Error verifying email' . $exception->getReason()], Response::HTTP_NOT_FOUND);
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
-
-        return $this->redirectToRoute('project_list');
+        return $this->json(['message' => 'Email verified'], Response::HTTP_OK);
     }
 }
