@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query\QueryException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -33,6 +34,18 @@ class ProjectRepository extends ServiceEntityRepository
     public function findAllSortedByDeadline(): array
     {
         return $this->findBy([], ['deadline' => Criteria::ASC]);
+    }
+
+    /**
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return Project[]
+     */
+    public function findFilteredAndSorted(array $criteria = [], ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
+    {
+        return $this->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     public function existsById(int $id): bool

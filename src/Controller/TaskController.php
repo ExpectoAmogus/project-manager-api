@@ -7,6 +7,7 @@ use App\Model\TaskCreateRequest;
 use App\Model\TaskUpdateRequest;
 use App\Service\TaskService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -17,16 +18,14 @@ class TaskController extends AbstractController
     }
 
     #[Route("/api/v1/task/all", name: "task_list", methods: "GET")]
-    public function listTasks(): Response
+    public function listTasks(Request $request): Response
     {
-        $tasks = $this->taskService->getAllTasks();
-        return $this->json($tasks, 200, [], ['groups' => 'task']);
-    }
+        $criteria = $request->query->get('criteria', []);
+        $orderBy = $request->query->get('orderBy', []);
+        $limit = $request->query->getInt('limit', null);
+        $offset = $request->query->getInt('offset', null);
 
-    #[Route("/api/v1/task/{projectId}/all", name: "task_list_by_project", methods: "GET")]
-    public function listTasksByProject($projectId): Response
-    {
-        $tasks = $this->taskService->getAllTasksByProjectId($projectId);
+        $tasks = $this->taskService->getAllTasks($criteria, $orderBy, $limit, $offset);
         return $this->json($tasks, 200, [], ['groups' => 'task']);
     }
 

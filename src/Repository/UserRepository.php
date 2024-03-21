@@ -49,7 +49,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword(
             $this->userPasswordHasher->hashPassword(
                 $user,
-                $data->get('plainPassword')->getData()
+                $data->plainPassword
             )
         );
         $this->getEntityManager()->persist($user);

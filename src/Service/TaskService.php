@@ -21,22 +21,9 @@ class TaskService
     {
     }
 
-    public function getAllTasks(): TaskListResponse
+    public function getAllTasks($criteria, $orderBy, $limit, $offset): TaskListResponse
     {
-        $tasks = $this->taskRepository->findAllSortedByDeadline();
-        $taskDTOs = array_map([$this->taskMapper, 'mapToDTO'], $tasks);
-
-        return new TaskListResponse($taskDTOs);
-    }
-
-    public function getAllTasksByProjectId(int $projectId): TaskListResponse
-    {
-        if (!$this->manager->getRepository(Project::class)->existsById($projectId)) {
-            throw new EntityNotFoundException();
-        }
-
-        $project = $this->manager->getRepository(Project::class)->find($projectId);
-        $tasks = $this->taskRepository->findAllByProjectSortedByDeadline($project);
+        $tasks = $this->taskRepository->findFilteredAndSorted($criteria, $orderBy, $limit, $offset);
         $taskDTOs = array_map([$this->taskMapper, 'mapToDTO'], $tasks);
 
         return new TaskListResponse($taskDTOs);
@@ -65,7 +52,6 @@ class TaskService
         $project = $this->manager->getRepository(Project::class)->find($taskCreateRequest->getProjectId());
 
         $task = $this->taskMapper->mapToEntity($taskCreateRequest, $project);
-        //TODO: add slug from title algorithm
 
         $this->manager->persist($task);
         $this->manager->flush();

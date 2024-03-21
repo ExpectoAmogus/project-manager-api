@@ -29,16 +29,15 @@ class TaskRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
      * @return Task[]
      */
-    public function findAllSortedByDeadline(): array
+    public function findFilteredAndSorted(array $criteria = [], ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
-        return $this->findBy([], ['deadline' => Criteria::ASC]);
-    }
-
-    public function findAllByProjectSortedByDeadline(Project $project): array
-    {
-        return $this->findBy(['project' => $project], ['deadline' => Criteria::ASC]);
+        return $this->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     public function existsById(int $id): bool

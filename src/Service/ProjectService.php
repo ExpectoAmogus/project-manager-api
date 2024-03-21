@@ -20,9 +20,9 @@ class ProjectService
     {
     }
 
-    public function getAllProjects(): ProjectListResponse
+    public function getAllProjects($criteria, $orderBy, $limit, $offset): ProjectListResponse
     {
-        $projects = $this->projectRepository->findAllSortedByDeadline();
+        $projects = $this->projectRepository->findFilteredAndSorted($criteria, $orderBy, $limit, $offset);
         $projectDTOs = array_map([$this->projectMapper, 'mapToDTO'], $projects);
 
         return new ProjectListResponse($projectDTOs);
@@ -48,7 +48,6 @@ class ProjectService
         }
 
         $project = $this->projectMapper->mapToEntity($projectCreateRequest);
-        //TODO: add slug from title algorithm
 
         $this->manager->persist($project);
         $this->manager->flush();
@@ -63,7 +62,6 @@ class ProjectService
         $project = $this->projectRepository->find($id);
 
         $project = $this->projectMapper->mapToEntityFromUpdateRequest($updatedProject, $project);
-        //TODO: add slug from title algorithm
 
         $this->manager->persist($project);
         $this->manager->flush();
