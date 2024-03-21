@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Query\QueryException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
